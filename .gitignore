@@ -1,0 +1,9 @@
+### IntelliJ IDEA ###
+.idea
+.vscode/
+.DS_Store
+target/
+*.iws
+*.iml
+*.ipr
+
