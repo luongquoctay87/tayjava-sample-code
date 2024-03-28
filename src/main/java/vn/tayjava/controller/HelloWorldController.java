@@ -13,23 +13,23 @@ public class HelloWorldController {
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@RequestParam int userId, @RequestBody UserRequestDTO user) {
+    public String updateUser(@PathVariable int userId, @RequestBody UserRequestDTO user) {
         System.out.println("Update user");
         return "User updated";
     }
 
     @PatchMapping("/{userId}")
-    public String updateStatus(@RequestParam boolean enable) {
+    public String changeUserStatus(@PathVariable int userId, @RequestParam boolean status) {
         return "User Status changed";
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@RequestParam int userId){
+    public String deleteUser(@PathVariable int userId){
         return "User deleted";
     }
 
     @GetMapping("/{userId}")
-    public UserRequestDTO getUser(@RequestParam int userId) {
+    public UserRequestDTO getUser(@PathVariable int userId) {
         return new UserRequestDTO("Tay", "Java", "admin@tayjava.vn", "0123456789");
     }
 }
