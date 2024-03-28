@@ -18,3 +18,14 @@
 - Java 17
 - Spring Boot 3.2.3
 - Maven 3.5+
+---
+## Bài 2 - Xây Dựng Ứng Dụng Hello World
+ - [Tiêu Chuẩn Của 1 API Backend Tốt](https://tayjava.vn/tieu-chuan-cua-mot-api-backend-tot)
+ - Xây Dựng Ứng Dụng Hello World
+
+## Link Video
+- Youtube: [Bài 2 - Xây Dựng Ứng Dụng Hello World - Spring Boot 3](https://youtu.be/7TzQ-RRjQso)
+
+## Lấy Source Code Về
+- git clone https://github.com/luongquoctay87/tayjava-sample-code.git
+- git checkout bai-2-hello-world-application
