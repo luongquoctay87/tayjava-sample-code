@@ -19,13 +19,12 @@
 - Spring Boot 3.2.3
 - Maven 3.5+
 ---
-## Bài 2 - Xây Dựng Ứng Dụng Hello World
- - [Tiêu Chuẩn Của 1 API Backend Tốt](https://tayjava.vn/tieu-chuan-cua-mot-api-backend-tot)
- - Xây Dựng Ứng Dụng Hello World
+## Bài 3 - Validate Input Data Trong Spring Boot
+ - [Validate Input Data Trong Spring Boot](https://tayjava.vn/validate-input-data-trong-spring-boot)
 
 ## Link Video
-- Youtube: [Bài 2 - Xây Dựng Ứng Dụng Hello World - Spring Boot 3](https://youtu.be/7TzQ-RRjQso)
+- Youtube: [Bài 3 - Validate Input Data Trong Spring Boot](https://youtube.com/@tayjava)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-2-hello-world-application
+- git checkout bai-3-validate-input-data
