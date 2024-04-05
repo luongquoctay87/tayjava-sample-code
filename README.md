@@ -18,3 +18,15 @@
 - Java 17
 - Spring Boot 3.2.3
 - Maven 3.5+
+
+---
+
+## Bài 4 - Validate Enum Trong Spring Boot
+ - https://tayjava.vn/validate-enum-trong-spring-boot
+
+## Link Video
+- Youtube: [Bài 4 - Validate Enum Trong Spring Boot](https://youtube.com/@tayjava)
+
+## Lấy Source Code Về
+- git clone https://github.com/luongquoctay87/tayjava-sample-code.git
+- git checkout bai-4-validate-enum-in-spring-boot
