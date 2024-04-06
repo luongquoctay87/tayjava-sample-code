@@ -21,12 +21,12 @@
 
 ---
 
-## Bài 3 - Validate Input Data Trong Spring Boot
- - https://tayjava.vn/validate-input-data-trong-spring-boot
+## Bài 4 - Validate Enum Trong Spring Boot
+ - https://tayjava.vn/validate-enum-trong-spring-boot
 
 ## Link Video
-- Youtube: [Bài 3 - Validate Input Data Trong Spring Boot](https://youtu.be/GYwUmy5WbkM)
+- Youtube: [Bài 4 - Validate Enum Trong Spring Boot](https://youtube.com/@tayjava)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-3-validate-input-data
+- git checkout bai-4-validate-enum-in-spring-boot
