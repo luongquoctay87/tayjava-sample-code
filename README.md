@@ -21,12 +21,12 @@
 
 ---
 
-## Bài 5 - Response Data Trong Spring Boot
- - https://tayjava.vn/response-data-trong-spring-boot
+## Bài 6 - Handle Exception Trong Spring Boot
+ - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 5 - Response Data Trong Spring Boot](https://youtu.be/eGttPSORKog)
+- YouTube: [Bài 6 - Handle Exception Trong Spring Boot](https://youtu.be/_o_cKn1S4_U)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-5-response-data
+- git checkout bai-6-handle-exception
