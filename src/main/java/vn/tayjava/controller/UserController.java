@@ -18,7 +18,7 @@ public class UserController {
     @PostMapping("/")
     public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO user) {
         System.out.println("Request add user " + user.getFirstName());
-        return new ResponseData<>(HttpStatus.BAD_REQUEST.value(), "User added successfully,", 1);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully,", 1);
     }
 
     @PutMapping("/{userId}")
@@ -35,7 +35,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseData<?> deleteUser(@PathVariable @Min(value = 1, message = "userId must be greater than 0") int userId) {
-        System.out.println("Request delete userId =" + userId);
+        System.out.println("Request delete userId=" + userId);
         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "User deleted successfully");
     }
 
