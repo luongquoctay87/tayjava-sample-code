@@ -25,7 +25,7 @@
  - https://tayjava.vn/validate-enum-trong-spring-boot
 
 ## Link Video
-- Youtube: [Bài 4 - Validate Enum Trong Spring Boot](https://youtube.com/@tayjava)
+- Youtube: [Bài 4 - Validate Enum Trong Spring Boot](https://youtu.be/T2NhaoIsbkA)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
