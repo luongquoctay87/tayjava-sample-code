@@ -5,7 +5,7 @@ import vn.tayjava.dto.UserRequestDTO;
 
 @RestController
 @RequestMapping("/user")
-public class HelloWorldController {
+public class UserController {
 
     @PostMapping("/")
     public String addUser(@RequestBody UserRequestDTO user) {
