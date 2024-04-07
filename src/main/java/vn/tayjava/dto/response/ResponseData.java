@@ -9,7 +9,7 @@ public class ResponseData<T> {
     private T data;
 
     /**
-     * Response data for the API to retrieve data successfully
+     * Response data for the API to retrieve data successfully. For GET, POST only
      * @param status
      * @param message
      * @param data
@@ -21,7 +21,7 @@ public class ResponseData<T> {
     }
 
     /**
-     * Response data when the API executes successfully or getting error
+     * Response data when the API executes successfully or getting error. For PUT, PATCH, DELETE
      * @param status
      * @param message
      */
