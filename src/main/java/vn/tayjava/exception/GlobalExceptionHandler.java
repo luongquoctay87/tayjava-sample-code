@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class GlobalExceptionHandler {
 
     /**
-     * Handle request data
+     * Handle exception when validate data
      *
      * @param e
      * @param request
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
                                                  "timestamp": "2024-04-07T11:38:56.368+00:00",
                                                  "status": 400,
                                                  "path": "/api/v1/...",
-                                                 "error": "Body is invalid",
+                                                 "error": "Invalid Payload",
                                                  "message": "{data} must be not blank"
                                              }
                                             """
@@ -55,19 +55,19 @@ public class GlobalExceptionHandler {
 
         String message = e.getMessage();
         if (e instanceof MethodArgumentNotValidException) {
-            int start = message.lastIndexOf("[");
-            int end = message.lastIndexOf("]");
-            message = message.substring(start + 1, end - 1);
-            errorResponse.setError("Body is invalid");
+            int start = message.lastIndexOf("[") + 1;
+            int end = message.lastIndexOf("]") - 1;
+            message = message.substring(start, end);
+            errorResponse.setError("Invalid Payload");
             errorResponse.setMessage(message);
         } else if (e instanceof MissingServletRequestParameterException) {
-            errorResponse.setError("Param is invalid");
+            errorResponse.setError("Invalid Parameter");
             errorResponse.setMessage(message);
         } else if (e instanceof ConstraintViolationException) {
-            errorResponse.setError("Param is invalid");
+            errorResponse.setError("Invalid Parameter");
             errorResponse.setMessage(message.substring(message.indexOf(" ") + 1));
         } else {
-            errorResponse.setError("Data is invalid");
+            errorResponse.setError("Invalid Data");
             errorResponse.setMessage(message);
         }
 
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * Handle exception when the request not found object
+     * Handle exception when the request not found data
      *
      * @param e
      * @param request
@@ -113,7 +113,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle conflict data exception
+     * Handle exception when the data is conflicted
      *
      * @param e
      * @param request
@@ -163,7 +163,7 @@ public class GlobalExceptionHandler {
                     content = {@Content(mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
                                     name = "500 Response",
-                                    summary = "Handle exception when internal Server error",
+                                    summary = "Handle exception when internal server error",
                                     value = """
                                             {
                                               "timestamp": "2023-10-19T06:35:52.333+00:00",
