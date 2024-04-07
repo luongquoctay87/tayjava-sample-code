@@ -21,12 +21,12 @@
 
 ---
 
-## Bài 4 - Validate Enum Trong Spring Boot
- - https://tayjava.vn/validate-enum-trong-spring-boot
+## Bài 5 - Response Data Trong Spring Boot
+ - https://tayjava.vn/response-data-trong-spring-boot
 
 ## Link Video
-- Youtube: [Bài 4 - Validate Enum Trong Spring Boot](https://youtube.com/@tayjava)
+- YouTube: [Bài 5 - Response Data Trong Spring Boot](https://youtu.be/eGttPSORKog)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-4-validate-enum-in-spring-boot
+- git checkout bai-5-response-data
