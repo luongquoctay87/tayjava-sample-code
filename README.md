@@ -19,12 +19,12 @@
 - Spring Boot 3.2.3
 - Maven 3.5+
 ---
-## Bài 3 - Validate Input Data Trong Spring Boot
- - [Validate Input Data Trong Spring Boot](https://tayjava.vn/validate-input-data-trong-spring-boot)
+## Bài 2 - Xây Dựng Ứng Dụng Hello World – Spring Boot 3
+ - [Xây Dựng Ứng Dụng Hello World – Spring Boot 3](https://tayjava.vn/xay-dung-ung-dung-hello-world-spring-boot-3)
 
 ## Link Video
-- Youtube: [Bài 3 - Validate Input Data Trong Spring Boot](https://youtube.com/@tayjava)
+- YouTube: [Bài 2 - Sample RESTful API Spring Boot](https://www.youtube.com/watch?v=s7Bhgp7DPCg)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-3-validate-input-data
+- git checkout bai-2-hello-world-application
