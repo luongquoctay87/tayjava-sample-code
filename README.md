@@ -21,12 +21,12 @@
 
 ---
 
-## Bài 6 - Handle Exception Trong Spring Boot
+## Bài 7 - Sử Dụng Lombok Đúng Cách Trong Spring Boot
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 6 - Handle Exception Trong Spring Boot](https://youtu.be/_o_cKn1S4_U)
+- YouTube: [Bài 7 - Sử Dụng Lombok Đúng Cách Trong Spring Boot](https://youtu.be/tzNRAWsHSfc)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-6-handle-exception
+- git checkout bai-7-add-lombok-to-application
