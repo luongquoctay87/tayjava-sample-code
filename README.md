@@ -22,12 +22,12 @@
 
 ---
 
-## Bài 7 - Sử Dụng Lombok Đúng Cách Trong Spring Boot
+## Bài 8 - Multiple Language Trong Spring Boot
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 7 - Sử Dụng Lombok Đúng Cách Trong Spring Boot](https://youtu.be/tzNRAWsHSfc)
+- YouTube: [Bài 8 - Multiple Language Trong Spring Boot](https://youtu.be/g48kQPe-faM)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-7-add-lombok-to-application
+- git checkout bai-8-i18n-for-restful-api
