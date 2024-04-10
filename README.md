@@ -22,12 +22,12 @@
 
 ---
 
-## Bài 8 - Multiple Language Trong Spring Boot
+## Bài 9 - Cấu Hình CORS Trong Spring Boot
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 8 - Multiple Language Trong Spring Boot](https://youtu.be/g48kQPe-faM)
+- YouTube: [Bài 9 - Cấu Hình CORS Trong Spring Boot](https://youtu.be/3lIFx_ZvPUk)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-8-i18n-for-restful-api
+- git checkout bai-9-config-cors-for-app
