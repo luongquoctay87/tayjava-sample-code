@@ -19,15 +19,16 @@
 - Spring Boot 3.2.3
 - Maven 3.5+
 - Lombok
+- DevTools
 
 ---
 
-## Bài 9 - Cấu Hình CORS Trong Spring Boot
+## Bài 10 - Build Ứng Dụng Spring Boot với Maven Profile
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 9 - Cấu Hình CORS Trong Spring Boot](https://youtu.be/3lIFx_ZvPUk)
+- YouTube: [Bài 10 - Build Ứng Dụng Spring Boot với Maven Profile](https://youtu.be/3lIFx_ZvPUk)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-9-config-cors-for-app
+- git checkout bai-10-build-app-using-maven-profile

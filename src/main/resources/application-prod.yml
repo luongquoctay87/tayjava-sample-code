@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    add-properties: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+openapi:
+  service:
+    api-docs: api-service
+    server: ${API_ENDPOINT}
+    title: API Service
+    version: 1.0.0
