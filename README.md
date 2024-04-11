@@ -20,15 +20,16 @@
 - Maven 3.5+
 - Lombok
 - DevTools
+- Docker, Docker compose
 
 ---
 
-## Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile
+## Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile](https://youtube.com/@tayjava)
+- YouTube: [Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot](https://youtube.com/@tayjava)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-11-config-maven-profiles
+- git checkout bai-12-package-app-with-docker
