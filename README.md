@@ -23,12 +23,12 @@
 
 ---
 
-## Bài 10 - Cấu Hình API Documents, Swagger Cho Spring Boot
+## Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 10 - Cấu Hình API Documents, Swagger Cho Spring Boot](https://youtube.com@tayjava)
+- YouTube: [Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile](https://youtu.be/3lIFx_ZvPUk)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-10-api-document-swagger
+- git checkout bai-10-build-app-using-maven-profile
