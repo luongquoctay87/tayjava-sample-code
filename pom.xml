@@ -66,12 +66,6 @@
             </properties>
         </profile>
         <profile>
-            <id>staging</id>
-            <properties>
-                <spring.profiles.active>staging</spring.profiles.active>
-            </properties>
-        </profile>
-        <profile>
             <id>prod</id>
             <properties>
                 <spring.profiles.active>prod</spring.profiles.active>

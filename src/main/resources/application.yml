@@ -1,10 +1,37 @@
+server:
+  port: 80
 spring:
   application:
     name: tay-java-app
+  profiles:
+    active: @spring.profiles.active@
 
-openapi:
-  service:
-    api-docs: api-service
-    server: http://localhost:8080
-    title: API Service
-    version: 1.0.0
+# Health check
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health: # config for EKS
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        step: 5s
+        enabled: true
+
+# Logging
+logging:
+  level:
+    root: INFO
+    web: OFF
+    org.springframework: INFO
+    org.apache: OFF
+    kafka: OFF

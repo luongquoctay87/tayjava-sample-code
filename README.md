@@ -27,8 +27,8 @@
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile](https://youtu.be/3lIFx_ZvPUk)
+- YouTube: [Bài 11 - Build Ứng Dụng Spring Boot với Maven Profile](https://youtube.com/@tayjava)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-10-build-app-using-maven-profile
+- git checkout bai-11-config-maven-profiles
