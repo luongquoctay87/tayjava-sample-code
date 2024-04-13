@@ -27,7 +27,7 @@
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 10 - Cấu Hình API Documents, Swagger Cho Spring Boot](https://youtube.com@tayjava)
+- YouTube: [Bài 10 - Cấu Hình API Documents, Swagger Cho Spring Boot](https://youtu.be/c4RVkOOy-Cs)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
