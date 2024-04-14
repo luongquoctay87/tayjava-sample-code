@@ -14,4 +14,3 @@ openapi:
     server: http://localhost:${server.port}
     title: API Document
     version: 1.0.0
-

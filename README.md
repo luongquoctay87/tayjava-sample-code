@@ -28,7 +28,7 @@
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot](https://youtube.com/@tayjava)
+- YouTube: [Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot](https://youtu.be/jClYcHpBEKo)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
