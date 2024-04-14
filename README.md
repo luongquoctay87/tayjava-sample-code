@@ -32,4 +32,4 @@
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-12-package-app-with-docker
+- git checkout bai-13-postgres-jpa-basic

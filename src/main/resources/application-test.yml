@@ -11,7 +11,8 @@ springdoc:
 openapi:
   service:
     api-docs: api-service
-    server: ${API_URL:DUMMY-API-URL}
+    serverUrl: ${API_URL:DUMMY-API-URL}
+    serverName: Server Test
     title: API Document
     version: 1.0.0
 

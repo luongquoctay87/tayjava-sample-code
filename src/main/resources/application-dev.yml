@@ -22,6 +22,7 @@ springdoc:
 openapi:
   service:
     api-docs: api-service
-    server: http://localhost:${server.port}
+    serverUrl: http://localhost:${server.port}
+    serverName: Server Dev
     title: API Document
     version: 1.0.0

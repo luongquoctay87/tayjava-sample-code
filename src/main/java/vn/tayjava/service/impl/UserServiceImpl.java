@@ -69,7 +69,10 @@ public class UserServiceImpl implements UserService {
         user.setDateOfBirth(request.getDateOfBirth());
         user.setGender(request.getGender());
         user.setPhone(request.getPhone());
-        user.setEmail(request.getEmail());
+        if (!request.getEmail().equals(user.getEmail())) {
+            // check email from database if not exist then allow update email otherwise throw exception
+            user.setEmail(request.getEmail());
+        }
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setStatus(request.getStatus());
