@@ -9,4 +9,5 @@ public enum Gender {
     FEMALE,
     @JsonProperty("other")
     OTHER;
+
 }

@@ -8,6 +8,5 @@ public enum UserStatus {
     @JsonProperty("inactive")
     INACTIVE,
     @JsonProperty("none")
-    NONE
-
+    NONE;
 }

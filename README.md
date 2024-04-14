@@ -24,11 +24,11 @@
 
 ---
 
-## Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot
+## Bài 13 - Spring Boot, Postgres, JPA Cơ Bản
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot](https://youtu.be/jClYcHpBEKo)
+- YouTube: [Bài 13 - Spring Boot, Postgres, JPA Cơ Bản]()
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
