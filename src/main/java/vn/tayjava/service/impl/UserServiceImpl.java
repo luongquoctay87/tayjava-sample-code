@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Save new user to DB
+     *
      * @param request
      * @return userId
      */
@@ -49,6 +50,17 @@ public class UserServiceImpl implements UserService {
                 .type(UserType.valueOf(request.getType().toUpperCase()))
                 .addresses(convertToAddress(request.getAddresses()))
                 .build();
+        request.getAddresses().forEach(a ->
+                user.saveAddress(Address.builder()
+                        .apartmentNumber(a.getApartmentNumber())
+                        .floor(a.getFloor())
+                        .building(a.getBuilding())
+                        .streetNumber(a.getStreetNumber())
+                        .street(a.getStreet())
+                        .city(a.getCity())
+                        .country(a.getCountry())
+                        .addressType(a.getAddressType())
+                        .build()));
         userRepository.save(user);
 
         log.info("User has added successfully, userId={}", user.getId());
@@ -58,6 +70,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Update user by userId
+     *
      * @param userId
      * @param request
      */
@@ -85,6 +98,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Change status of user by userId
+     *
      * @param userId
      * @param status
      */
@@ -99,6 +113,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Delete user by userId
+     *
      * @param userId
      */
     @Override
@@ -109,6 +124,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Get user detail by userId
+     *
      * @param userId
      * @return
      */
@@ -131,12 +147,13 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Get all user per pageNo and pageSize
+     *
      * @param pageNo
      * @param pageSize
      * @return
      */
     @Override
-    public PageResponse<?> getAllUsers(int pageNo, int pageSize) {
+    public PageResponse getAllUsers(int pageNo, int pageSize) {
         Page<User> page = userRepository.findAll(PageRequest.of(pageNo, pageSize));
 
         List<UserDetailResponse> list = page.stream().map(user -> UserDetailResponse.builder()
