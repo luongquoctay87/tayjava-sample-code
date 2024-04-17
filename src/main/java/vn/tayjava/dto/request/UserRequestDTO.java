@@ -49,7 +49,6 @@ public class UserRequestDTO implements Serializable {
     @NotNull(message = "username must be not null")
     private String username;
 
-    @NotNull(message = "password must be not null")
     private String password;
 
     @NotNull(message = "type must be not null")
@@ -57,7 +56,7 @@ public class UserRequestDTO implements Serializable {
     private String type;
 
     @NotEmpty(message = "addresses can not empty")
-    private Set<Address> addresses;
+    private Set<AddressDTO> addresses;
 
     @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
     private UserStatus status;
@@ -67,17 +66,5 @@ public class UserRequestDTO implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-    }
-
-    @Getter
-    public static class Address {
-        private String apartmentNumber;
-        private String floor;
-        private String building;
-        private String streetNumber;
-        private String street;
-        private String city;
-        private String country;
-        private Integer addressType;
     }
 }
