@@ -7,8 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import vn.tayjava.dto.request.AddressDTO;
 import vn.tayjava.dto.request.UserRequestDTO;
+import vn.tayjava.dto.response.PageResponse;
 import vn.tayjava.dto.response.UserDetailResponse;
 import vn.tayjava.exception.ResourceNotFoundException;
 import vn.tayjava.model.Address;
@@ -18,9 +20,12 @@ import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
 import vn.tayjava.util.UserType;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -110,46 +115,85 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDetailResponse> getAllUsers(int pageNo, int pageSize, String sortBy) {
-        int p = 0;
+    public PageResponse<?> getAllUsersWithSortBy(int pageNo, int pageSize, String sortBy) {
+        int page = 0;
         if (pageNo > 0) {
-            p = pageNo -1;
+            page = pageNo - 1;
         }
 
-//        String column = "";
-//        Sort sort = null;
-//        for (String s : sortBy.split(":")) {
-//            if (!StringUtils.hasLength(column)) {
-//                column = s;
-//            } else {
-//                sort = s.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(Sort.Direction.DESC, column) : Sort.by(Sort.Direction.ASC, column);
-//            }
-//        }
-//
-//        assert sort != null;
+        List<Sort.Order> sorts = new ArrayList<>();
 
-        Sort sort = null;
-        for (String column : sortBy.split(",")) {
-            if (sort == null) {
-                sort = Sort.by(column);
-            } else {
-                sort.and(Sort.by(column));
+        // neu co gia tri
+        if (StringUtils.hasLength(sortBy)) {
+            // firstName:asc|desc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if (matcher.find()) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                } else {
+                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                }
             }
         }
 
-        assert sort != null;
-        Pageable pageable = PageRequest.of(p, pageSize, sort);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
         Page<User> users = userRepository.findAll(pageable);
+        List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build()).toList();
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPage(users.getTotalPages())
+                .items(response)
+                .build();
+    }
 
-        return users.stream().map(user -> UserDetailResponse.builder()
-                        .id(user.getId())
-                        .firstName(user.getFirstName())
-                        .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .phone(user.getPhone())
-                        .build())
-                .toList();
+    @Override
+    public PageResponse<?> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize, String... sorts) {
+        int page = 0;
+        if (pageNo > 0) {
+            page = pageNo - 1;
+        }
+
+        List<Sort.Order> orders = new ArrayList<>();
+
+        for (String sortBy : sorts) {
+            log.info("sortBy: {}", sortBy);
+            // firstName:asc|desc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if (matcher.find()) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                } else {
+                    orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                }
+            }
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(orders));
+
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build()).toList();
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPage(users.getTotalPages())
+                .items(response)
+                .build();
     }
 
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {

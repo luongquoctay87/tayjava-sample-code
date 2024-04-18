@@ -1,10 +1,9 @@
 package vn.tayjava.service;
 
 import vn.tayjava.dto.request.UserRequestDTO;
+import vn.tayjava.dto.response.PageResponse;
 import vn.tayjava.dto.response.UserDetailResponse;
 import vn.tayjava.util.UserStatus;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -18,5 +17,7 @@ public interface UserService {
 
     UserDetailResponse getUser(long userId);
 
-    List<UserDetailResponse> getAllUsers(int pageNo, int pageSize, String sortBy);
+    PageResponse<?> getAllUsersWithSortBy(int pageNo, int pageSize, String sortBy);
+
+    PageResponse<?> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize, String... sorts);
 }

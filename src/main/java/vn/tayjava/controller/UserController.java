@@ -18,8 +18,6 @@ import vn.tayjava.exception.ResourceNotFoundException;
 import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -100,10 +98,19 @@ public class UserController {
 
     @Operation(summary = "Get list of users per pageNo", description = "Send a request via this API to get user list by pageNo and pageSize")
     @GetMapping("/list")
-    public ResponseData<List<UserDetailResponse>> getAllUsers(@RequestParam(defaultValue = "0", required = false) int pageNo,
+    public ResponseData<?> getAllUsers(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                               @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
                                                               @RequestParam(required = false) String sortBy) {
         log.info("Request get all of users");
-        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getAllUsers(pageNo, pageSize, sortBy));
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getAllUsersWithSortBy(pageNo, pageSize, sortBy));
+    }
+
+    @Operation(summary = "Get list of users with sort by multiple columns", description = "Send a request via this API to get user list by pageNo, pageSize and sort by multiple column")
+    @GetMapping("/list-with-sort-by-multiple-columns")
+    public ResponseData<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                                              @RequestParam(defaultValue = "20", required = false) int pageSize,
+                                                              @RequestParam(required = false) String... sorts) {
+        log.info("Request get all of users with sort by multiple columns");
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getAllUsersWithSortByMultipleColumns(pageNo, pageSize, sorts));
     }
 }
