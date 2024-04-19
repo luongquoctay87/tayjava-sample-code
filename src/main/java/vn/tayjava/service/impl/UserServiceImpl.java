@@ -15,6 +15,7 @@ import vn.tayjava.dto.response.UserDetailResponse;
 import vn.tayjava.exception.ResourceNotFoundException;
 import vn.tayjava.model.Address;
 import vn.tayjava.model.User;
+import vn.tayjava.repository.SearchRepository;
 import vn.tayjava.repository.UserRepository;
 import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
@@ -33,6 +34,7 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final SearchRepository searchRepository;
 
     @Override
     public long saveUser(UserRequestDTO request) {
@@ -164,16 +166,18 @@ public class UserServiceImpl implements UserService {
 
         List<Sort.Order> orders = new ArrayList<>();
 
-        for (String sortBy : sorts) {
-            log.info("sortBy: {}", sortBy);
-            // firstName:asc|desc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+        if (sorts != null) {
+            for (String sortBy : sorts) {
+                log.info("sortBy: {}", sortBy);
+                // firstName:asc|desc
+                Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+                Matcher matcher = pattern.matcher(sortBy);
+                if (matcher.find()) {
+                    if (matcher.group(3).equalsIgnoreCase("asc")) {
+                        orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                    } else {
+                        orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                    }
                 }
             }
         }
@@ -194,6 +198,11 @@ public class UserServiceImpl implements UserService {
                 .totalPage(users.getTotalPages())
                 .items(response)
                 .build();
+    }
+
+    @Override
+    public PageResponse<?> getAllUsersWithSortByMultipleColumnsAndSearch(int pageNo, int pageSize, String search, String sort) {
+        return searchRepository.searchUser(pageNo, pageSize, search, sort);
     }
 
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {
