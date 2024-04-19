@@ -70,7 +70,7 @@ CREATE TABLE public.tbl_address (
 ALTER TABLE public.tbl_address ADD CONSTRAINT fk_address_and_user FOREIGN KEY (user_id) REFERENCES public.tbl_user(id);
 
 
-INSERT INTO public.tbl_user (first_name,last_name,date_of_birth,gender,phone,email,username,"password",status,"type",created_at,updated_at) VALUES
+INSERT INTO public.tbl_user (last_name,first_name,date_of_birth,gender,phone,email,username,"password",status,"type",created_at,updated_at) VALUES
 	 ('Le','Ngan','1980-06-05','FEMALE','0123456789','someone@email.com','tayjava','password','ACTIVE','USER','2024-04-18 09:58:07.169','2024-04-18 09:58:07.169'),
 	 ('Nguyen The','Minh','1981-06-05','MALE','0123456789','someone@email.com','tayjava','password','ACTIVE','USER','2024-04-18 09:56:24.587','2024-04-18 09:56:24.587'),
 	 ('Le Mai','Huong','1982-07-24','FEMALE','0123456789','someone@email.com','tayjava','password','ACTIVE','USER','2024-04-18 09:58:07.611','2024-04-18 09:58:07.611'),
@@ -94,10 +94,10 @@ INSERT INTO public.tbl_user (first_name,last_name,date_of_birth,gender,phone,ema
 	 ('Trinh Van','Sam','1999-01-19','FEMALE','0123456789','someone@email.com','tayjava','password','ACTIVE','USER','2024-04-18 09:56:26.88','2024-04-18 09:56:26.88'),
 	 ('Kieu','My','2000-02-22','FEMALE','0123456789','someone@email.com','tayjava','password','ACTIVE','USER','2024-04-18 09:56:31.622','2024-04-18 09:56:31.622'),
 	 ('Nguyen Trung','Nguyen','2003-03-12','MALE','0123456789','nguyen@email.com','nguyen','password','ACTIVE','USER','2024-04-18 09:56:22.366','2024-04-18 09:56:22.366'),
-	 ('Luong Quoc','Dang Huy','2001-04-23','MALE','0123456789','dau@email.com','dau','password','INACTIVE','USER','2024-04-18 09:56:23.573','2024-04-18 09:56:23.573'),
-	 ('Luong Quoc','Minh Khang','2002-05-25','MALE','0123456789','sumo@email.com','sumo','password','NONE','USER','2024-04-18 09:56:24.091','2024-04-18 09:56:24.091'),
-	 ('Luong Quoc','Tay','2004-02-15','MALE','0123456789','tay@email.com','tay','password','ACTIVE','OWNER','2024-04-18 09:56:21.536','2024-04-18 09:56:21.536'),
-	 ('Nguyen Thi','Thuy','2003-05-20','FEMALE','0123456789','thuy@email.com','thuy','password','ACTIVE','ADMIN','2024-04-18 09:56:23.06','2024-04-18 09:56:23.06');
+	 ('Dang','Huy','2001-04-23','MALE','0123456789','dau@email.com','dau','password','INACTIVE','USER','2024-04-18 09:56:23.573','2024-04-18 09:56:23.573'),
+	 ('Minh','Khang','2002-05-25','MALE','0123456789','sumo@email.com','sumo','password','NONE','USER','2024-04-18 09:56:24.091','2024-04-18 09:56:24.091'),
+	 ('Tay','Tay','2004-02-15','MALE','0123456789','tay@email.com','tay','password','ACTIVE','OWNER','2024-04-18 09:56:21.536','2024-04-18 09:56:21.536'),
+	 ('Thuy','Thuy','2003-05-20','FEMALE','0123456789','thuy@email.com','thuy','password','ACTIVE','ADMIN','2024-04-18 09:56:23.06','2024-04-18 09:56:23.06');
 
 
 	INSERT INTO public.tbl_address (apartment_number,floor,building,street_number,street,city,country,address_type,user_id,created_at,updated_at) VALUES
