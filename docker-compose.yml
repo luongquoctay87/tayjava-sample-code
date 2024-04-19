@@ -1,6 +1,21 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+      - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5432:5432'
+    networks:
+      - backend
 
   api-service:
     container_name: api-service
@@ -17,3 +32,6 @@ services:
 networks:
   backend:
     driver: bridge
+
+volumes:
+  postgres:
