@@ -16,20 +16,24 @@
 
 ## Technical Stacks
 - Java 17
-- Spring Boot 3.2.3
 - Maven 3.5+
+- Spring Boot 3.2.3
+- Spring Data Validation
+- Spring Data JPA
+- Postgres
 - Lombok
 - DevTools
 - Docker, Docker compose
 
 ---
-
-## Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot
+## Topic: Spring Data JPA - Series
  - [Tây Java](https://tayjava.vn)
 
 ## Link Video
-- YouTube: [Bài 12 - Docker, Docker compose và Cách Đóng Gói Ứng Dụng Spring Boot](https://youtu.be/jClYcHpBEKo)
+- [Bài 13. Spring Data JPA - Phần 1](https://youtu.be/KBj76wrePCA)
+- [Bài 14. Spring Data JPA - Phần 2](https://youtu.be/zsiNVvCy9Uo)
+- [Bài 15. Spring Data JPA - Phần 3](https://youtu.be/jYbppQmNnO0)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-12-package-app-with-docker
+- git checkout spring-data-jpa
