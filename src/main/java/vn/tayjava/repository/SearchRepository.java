@@ -29,7 +29,7 @@ public class SearchRepository {
      * @param sortBy
      * @return user list with sorting and paging
      */
-    public PageResponse searchUser(int pageNo, int pageSize, String search, String sortBy) {
+    public PageResponse<?> searchUser(int pageNo, int pageSize, String search, String sortBy) {
         log.info("Execute search user with keyword={}", search);
 
         StringBuilder sqlQuery = new StringBuilder("SELECT new vn.tayjava.dto.response.UserDetailResponse(u.id, u.firstName, u.lastName, u.phone, u.email) FROM User u WHERE 1=1");
