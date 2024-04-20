@@ -62,6 +62,12 @@ public class User extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     public void saveAddress(Address address) {
         if (address != null) {
             if (addresses == null) {
@@ -76,5 +82,10 @@ public class User extends AbstractEntity {
     @JsonIgnore // Stop infinite loop
     public Set<Address> getAddresses() {
         return addresses;
+    }
+
+    @JsonIgnore
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
