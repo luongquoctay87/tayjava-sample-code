@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static vn.tayjava.util.AppConst.SORT_BY;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -125,10 +127,9 @@ public class UserServiceImpl implements UserService {
 
         List<Sort.Order> sorts = new ArrayList<>();
 
-        // neu co gia tri
         if (StringUtils.hasLength(sortBy)) {
             // firstName:asc|desc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Pattern pattern = Pattern.compile(SORT_BY);
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
                 if (matcher.group(3).equalsIgnoreCase("asc")) {

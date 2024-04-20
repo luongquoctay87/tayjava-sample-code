@@ -8,10 +8,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import vn.tayjava.dto.response.PageResponse;
@@ -25,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static vn.tayjava.util.AppConst.SEARCH_OPERATOR;
+import static vn.tayjava.util.AppConst.SORT_BY;
 
 @Component
 @Slf4j
@@ -127,7 +125,17 @@ public class SearchRepository {
             }
         }
 
-        List<User> users = getUsers(pageNo, pageSize, params);
+        if (StringUtils.hasLength(sortBy)) {
+            Pattern pattern = Pattern.compile(SORT_BY);
+            for (String s : search) {
+                Matcher matcher = pattern.matcher(s);
+                if (matcher.find()) {
+                    params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+                }
+            }
+        }
+
+        List<User> users = getUsers(pageNo, pageSize, params, sortBy);
 
         Long totalElements = getTotalElements(params);
 
@@ -143,21 +151,36 @@ public class SearchRepository {
 
     /**
      * Get all users with conditions
+     *
      * @param pageNo
      * @param pageSize
      * @param params
      * @return
      */
-    private List<User> getUsers(int pageNo, int pageSize, List<SearchCriteria> params) {
+    private List<User> getUsers(int pageNo, int pageSize, List<SearchCriteria> params, String sortBy) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
-        Root<User> root = query.from(User.class);
+        Root<User> userRoot = query.from(User.class);
 
         Predicate predicate = criteriaBuilder.conjunction();
-        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, criteriaBuilder, root);
+        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, criteriaBuilder, userRoot);
         params.forEach(searchConsumer);
         predicate = searchConsumer.getPredicate();
         query.where(predicate);
+
+        if (StringUtils.hasLength(sortBy)) {
+            Pattern pattern = Pattern.compile(SORT_BY);
+            Matcher matcher = pattern.matcher(sortBy);
+            if (matcher.find()) {
+                String columnName = matcher.group(1);
+                String direction = matcher.group(3);
+                if (direction.equalsIgnoreCase(Sort.Direction.ASC.name())) {
+                    query.orderBy(criteriaBuilder.asc(userRoot.get(columnName)));
+                } else {
+                    query.orderBy(criteriaBuilder.desc(userRoot.get(columnName)));
+                }
+            }
+        }
 
         return entityManager.createQuery(query)
                 .setFirstResult(pageNo)
@@ -167,6 +190,7 @@ public class SearchRepository {
 
     /**
      * Count users with conditions
+     *
      * @param params
      * @return
      */
