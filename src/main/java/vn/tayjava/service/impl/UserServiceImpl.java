@@ -206,8 +206,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String[] search, String sortBy) {
-        return searchRepository.searchUserByCriteria(pageNo, pageSize, search, sortBy);
+    public PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String sortBy, String... search) {
+        return searchRepository.searchUserByCriteria(pageNo, pageSize, sortBy, search);
     }
 
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {

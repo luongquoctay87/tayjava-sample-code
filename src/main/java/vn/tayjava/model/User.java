@@ -1,5 +1,6 @@
 package vn.tayjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -58,7 +59,7 @@ public class User extends AbstractEntity {
     @Column(name = "status")
     private UserStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 
     public void saveAddress(Address address) {
@@ -69,5 +70,11 @@ public class User extends AbstractEntity {
             addresses.add(address);
             address.setUser(this); // save user_id
         }
+    }
+
+    // https://stackoverflow.com/questions/56899986/why-infinite-loop-hibernate-when-load-data
+    @JsonIgnore // Stop infinite loop
+    public Set<Address> getAddresses() {
+        return addresses;
     }
 }

@@ -105,13 +105,16 @@ public class SearchRepository {
 
     /**
      * Advance search user by criterias
+     *
      * @param pageNo
      * @param pageSize
-     * @param search
      * @param sortBy
+     * @param search
      * @return
      */
-    public PageResponse<?> searchUserByCriteria(int pageNo, int pageSize, String[] search, String sortBy) {
+    public PageResponse<?> searchUserByCriteria(int pageNo, int pageSize, String sortBy, String... search) {
+        log.info("Search user with search={} and sortBy={}", search, sortBy);
+
         List<SearchCriteria> params = new ArrayList<>();
 
         if (search.length > 0) {
@@ -124,31 +127,11 @@ public class SearchRepository {
             }
         }
 
-        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<User> query = builder.createQuery(User.class);
-        final Root<User> r = query.from(User.class);
+        List<User> users = getUsers(pageNo, pageSize, params);
 
-        Predicate predicate = builder.conjunction();
-        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, builder, r);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
-        query.where(predicate);
+        Long totalElements = getTotalElements(params);
 
-        // This query fetches the Users as per the Page Limit
-        List<User> users = entityManager.createQuery(query)
-                .setFirstResult(pageNo)
-                .setMaxResults(pageSize)
-                .getResultList();
-
-        // Create count query
-        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        Root<User> usersRootCount = countQuery.from(User.class);
-        countQuery.select(builder.count(usersRootCount)).where(predicate);
-
-        // Fetches the count of all UserEntity as per given criteria
-        Long count = entityManager.createQuery(countQuery).getSingleResult();
-
-        Page<User> page = new PageImpl<>(users, PageRequest.of(pageNo, pageSize), count);
+        Page<User> page = new PageImpl<>(users, PageRequest.of(pageNo, pageSize), totalElements);
 
         return PageResponse.builder()
                 .pageNo(pageNo)
@@ -156,5 +139,49 @@ public class SearchRepository {
                 .totalPage(page.getTotalPages())
                 .items(users)
                 .build();
+    }
+
+    /**
+     * Get all users with conditions
+     * @param pageNo
+     * @param pageSize
+     * @param params
+     * @return
+     */
+    private List<User> getUsers(int pageNo, int pageSize, List<SearchCriteria> params) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+        Root<User> root = query.from(User.class);
+
+        Predicate predicate = criteriaBuilder.conjunction();
+        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, criteriaBuilder, root);
+        params.forEach(searchConsumer);
+        predicate = searchConsumer.getPredicate();
+        query.where(predicate);
+
+        return entityManager.createQuery(query)
+                .setFirstResult(pageNo)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
+    /**
+     * Count users with conditions
+     * @param params
+     * @return
+     */
+    private Long getTotalElements(List<SearchCriteria> params) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<User> root = query.from(User.class);
+
+        Predicate predicate = criteriaBuilder.conjunction();
+        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, criteriaBuilder, root);
+        params.forEach(searchConsumer);
+        predicate = searchConsumer.getPredicate();
+        query.select(criteriaBuilder.count(root));
+        query.where(predicate);
+
+        return entityManager.createQuery(query).getSingleResult();
     }
 }
