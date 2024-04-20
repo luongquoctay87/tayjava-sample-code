@@ -65,9 +65,50 @@ CREATE TABLE public.tbl_address (
 );
 
 
+CREATE TABLE public.tbl_role (
+	id bigserial PRIMARY KEY,
+	name varchar(255) NOT NULL
+);
+
+CREATE TABLE public.tbl_group (
+	id bigserial PRIMARY KEY,
+	name varchar(255) NOT null,
+	role_id bigserial NOT NULL
+);
+
+
+CREATE TABLE public.tbl_user_has_role (
+	user_id bigserial NOT NULL,
+	role_id bigserial NOT NULL
+);
+
+CREATE TABLE public.tbl_permission (
+	id bigserial PRIMARY KEY,
+	name varchar(255) NOT NULL
+);
+
+CREATE TABLE public.tbl_role_has_permission (
+	role_id bigserial NOT NULL,
+	permission_id bigserial NOT NULL
+);
+
+
+CREATE TABLE public.tbl_user_has_group (
+	user_id bigserial NOT NULL,
+	group_id bigserial NOT NULL
+);
+
+
 -- public.tbl_address foreign keys
 
-ALTER TABLE public.tbl_address ADD CONSTRAINT fk_address_and_user FOREIGN KEY (user_id) REFERENCES public.tbl_user(id);
+ALTER TABLE public.tbl_address ADD CONSTRAINT fk_address_to_user FOREIGN KEY (user_id) REFERENCES public.tbl_user(id);
+ALTER TABLE public.tbl_group ADD CONSTRAINT fk_group_to_role FOREIGN KEY (role_id) REFERENCES public.tbl_role(id);
+ALTER TABLE public.tbl_user_has_role ADD CONSTRAINT fk_user_has_role_to_user FOREIGN KEY (user_id) REFERENCES public.tbl_user(id);
+ALTER TABLE public.tbl_user_has_role ADD CONSTRAINT fk_user_has_role_to_role FOREIGN KEY (role_id) REFERENCES public.tbl_role(id);
+ALTER TABLE public.tbl_role_has_permission ADD CONSTRAINT fk_role_has_permission_to_role FOREIGN KEY (role_id) REFERENCES public.tbl_role(id);
+ALTER TABLE public.tbl_role_has_permission ADD CONSTRAINT fk_role_has_permission_to_permission FOREIGN KEY (permission_id) REFERENCES public.tbl_permission(id);
+ALTER TABLE public.tbl_user_has_group ADD CONSTRAINT fk_user_has_group_to_user FOREIGN KEY (user_id) REFERENCES public.tbl_user(id);
+ALTER TABLE public.tbl_user_has_group ADD CONSTRAINT fk_user_has_group_to_group FOREIGN KEY (group_id) REFERENCES public.tbl_group(id);
 
 
 INSERT INTO public.tbl_user (last_name,first_name,date_of_birth,gender,phone,email,username,"password",status,"type",created_at,updated_at) VALUES
