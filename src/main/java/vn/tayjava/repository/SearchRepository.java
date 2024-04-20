@@ -5,10 +5,14 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import vn.tayjava.dto.response.PageResponse;
+import vn.tayjava.model.Address;
 import vn.tayjava.model.User;
 import vn.tayjava.repository.criteria.SearchCriteria;
 import vn.tayjava.repository.criteria.UserSearchQueryCriteriaConsumer;
@@ -27,6 +31,8 @@ public class SearchRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private static final String LIKE_FORMAT = "%%%s%%";
 
     /**
      * Search user using keyword and
@@ -49,7 +55,7 @@ public class SearchRepository {
 
         if (StringUtils.hasLength(sortBy)) {
             // firstName:asc|desc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Pattern pattern = Pattern.compile(SORT_BY);
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
                 sqlQuery.append(String.format(" ORDER BY u.%s %s", matcher.group(1), matcher.group(3)));
@@ -59,9 +65,9 @@ public class SearchRepository {
         // Get list of users
         Query selectQuery = entityManager.createQuery(sqlQuery.toString());
         if (StringUtils.hasLength(search)) {
-            selectQuery.setParameter("firstName", String.format("%%%s%%", search));
-            selectQuery.setParameter("lastName", String.format("%%%s%%", search));
-            selectQuery.setParameter("email", String.format("%%%s%%", search));
+            selectQuery.setParameter("firstName", String.format(LIKE_FORMAT, search));
+            selectQuery.setParameter("lastName", String.format(LIKE_FORMAT, search));
+            selectQuery.setParameter("email", String.format(LIKE_FORMAT, search));
         }
         selectQuery.setFirstResult(pageNo);
         selectQuery.setMaxResults(pageSize);
@@ -77,9 +83,9 @@ public class SearchRepository {
 
         Query countQuery = entityManager.createQuery(sqlCountQuery.toString());
         if (StringUtils.hasLength(search)) {
-            countQuery.setParameter(1, String.format("%%%s%%", search));
-            countQuery.setParameter(2, String.format("%%%s%%", search));
-            countQuery.setParameter(3, String.format("%%%s%%", search));
+            countQuery.setParameter(1, String.format(LIKE_FORMAT, search));
+            countQuery.setParameter(2, String.format(LIKE_FORMAT, search));
+            countQuery.setParameter(3, String.format(LIKE_FORMAT, search));
             countQuery.getSingleResult();
         }
 
@@ -107,17 +113,17 @@ public class SearchRepository {
      * @param search
      * @return
      */
-    public PageResponse<?> searchUserByCriteria(int offset, int pageSize, String sortBy, String... search) {
+    public PageResponse<?> searchUserByCriteria(int offset, int pageSize, String sortBy, String address, String... search) {
         log.info("Search user with search={} and sortBy={}", search, sortBy);
 
-        List<SearchCriteria> params = new ArrayList<>();
+        List<SearchCriteria> criteriaList = new ArrayList<>();
 
         if (search.length > 0) {
             Pattern pattern = Pattern.compile(SEARCH_OPERATOR);
             for (String s : search) {
                 Matcher matcher = pattern.matcher(s);
                 if (matcher.find()) {
-                    params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+                    criteriaList.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
                 }
             }
         }
@@ -127,14 +133,14 @@ public class SearchRepository {
             for (String s : search) {
                 Matcher matcher = pattern.matcher(s);
                 if (matcher.find()) {
-                    params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+                    criteriaList.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
                 }
             }
         }
 
-        List<User> users = getUsers(offset, pageSize, params, sortBy);
+        List<User> users = getUsers(offset, pageSize, criteriaList, address, sortBy);
 
-        Long totalElements = getTotalElements(params);
+        Long totalElements = getTotalElements(criteriaList);
 
         Page<User> page = new PageImpl<>(users, PageRequest.of(offset, pageSize), totalElements);
 
@@ -151,31 +157,38 @@ public class SearchRepository {
      *
      * @param offset
      * @param pageSize
-     * @param params
+     * @param criteriaList
+     * @param sortBy
      * @return
      */
-    private List<User> getUsers(int offset, int pageSize, List<SearchCriteria> params, String sortBy) {
+    private List<User> getUsers(int offset, int pageSize, List<SearchCriteria> criteriaList, String address, String sortBy) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = query.from(User.class);
 
-//        Join<Address, User> addressUserJoin = userRoot.join("addresses");
-//        criteriaBuilder.like(addressUserJoin.get("city"), "Hanoi");
+        Predicate userPredicate = criteriaBuilder.conjunction();
+        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(userPredicate, criteriaBuilder, userRoot);
 
-        Predicate predicate = criteriaBuilder.conjunction();
-        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, criteriaBuilder, userRoot);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
-        query.where(predicate);
+        if (StringUtils.hasLength(address)) {
+            Join<Address, User> userAddressJoin = userRoot.join("addresses");
+            Predicate addressPredicate = criteriaBuilder.equal(userAddressJoin.get("city"), address);
+            query.where(userPredicate, addressPredicate);
+        } else {
+            criteriaList.forEach(searchConsumer);
+            userPredicate = searchConsumer.getPredicate();
+            query.where(userPredicate);
+        }
 
         if (StringUtils.hasLength(sortBy)) {
             Pattern pattern = Pattern.compile(SORT_BY);
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    query.orderBy(criteriaBuilder.asc(userRoot.get(matcher.group(1))));
+                String fieldName = matcher.group(1);
+                String direction = matcher.group(3);
+                if (direction.equalsIgnoreCase("asc")) {
+                    query.orderBy(criteriaBuilder.asc(userRoot.get(fieldName)));
                 } else {
-                    query.orderBy(criteriaBuilder.desc(userRoot.get(matcher.group(1))));
+                    query.orderBy(criteriaBuilder.desc(userRoot.get(fieldName)));
                 }
             }
         }
