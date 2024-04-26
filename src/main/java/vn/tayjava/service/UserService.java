@@ -1,5 +1,6 @@
 package vn.tayjava.service;
 
+import org.springframework.data.domain.Pageable;
 import vn.tayjava.dto.request.UserRequestDTO;
 import vn.tayjava.dto.response.PageResponse;
 import vn.tayjava.dto.response.UserDetailResponse;
@@ -24,4 +25,6 @@ public interface UserService {
     PageResponse<?> getAllUsersAndSearchWithPagingAndSorting(int pageNo, int pageSize, String search, String sortBy);
 
     PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String sortBy, String address, String... search);
+
+    PageResponse<?> getUsersBySpecifications(Pageable pageable, String[] search);
 }
