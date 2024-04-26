@@ -1,5 +1,6 @@
 package vn.tayjava.service.impl;
 
+import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,17 +18,16 @@ import vn.tayjava.model.Address;
 import vn.tayjava.model.User;
 import vn.tayjava.repository.SearchRepository;
 import vn.tayjava.repository.UserRepository;
+import vn.tayjava.repository.specification.UserSpecificationsBuilder;
 import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
 import vn.tayjava.util.UserType;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static vn.tayjava.repository.specification.SearchOperation.SIMPLE_OPERATION_SET;
 import static vn.tayjava.util.AppConst.SORT_BY;
 
 @Service
@@ -151,9 +151,9 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .build()).toList();
         return PageResponse.builder()
-                .pageNo(pageNo)
-                .pageSize(pageSize)
-                .totalPage(users.getTotalPages())
+                .page(pageNo)
+                .size(pageSize)
+                .total(users.getTotalPages())
                 .items(response)
                 .build();
     }
@@ -186,19 +186,8 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(orders));
 
         Page<User> users = userRepository.findAll(pageable);
-        List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .build()).toList();
-        return PageResponse.builder()
-                .pageNo(pageNo)
-                .pageSize(pageSize)
-                .totalPage(users.getTotalPages())
-                .items(response)
-                .build();
+
+        return convertToPageResponse(users, pageable.getPageNumber(), pageable.getPageSize());
     }
 
     @Override
@@ -211,6 +200,34 @@ public class UserServiceImpl implements UserService {
         return searchRepository.searchUserByCriteria(pageNo, pageSize, sortBy, address, search);
     }
 
+    @Override
+    public PageResponse<?> getUsersBySpecifications(Pageable pageable, String... search) {
+        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
+        String operations = Joiner.on("|").join(SIMPLE_OPERATION_SET);
+
+        Page<User> users;
+        if (search != null) {
+            Pattern pattern = Pattern.compile("(\\w+?)(" + operations + ")(\\p{Punct}?)(.*)(\\p{Punct}?)");
+            for (String s : search) {
+                Matcher matcher = pattern.matcher(s);
+                if (matcher.find()) {
+                    builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
+                }
+            }
+            users = userRepository.findAll(Objects.requireNonNull(builder.build()), pageable);
+        } else {
+            users = userRepository.findAll(pageable);
+        }
+
+        return convertToPageResponse(users, pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    /**
+     * Convert Set<AddressDTO> to Set<Address>
+     *
+     * @param addresses
+     * @return
+     */
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {
         Set<Address> result = new HashSet<>();
         addresses.forEach(a ->
@@ -230,5 +247,29 @@ public class UserServiceImpl implements UserService {
 
     private User getUserById(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    /**
+     * Convert Page<User> to PageResponse
+     *
+     * @param users
+     * @param page
+     * @param size
+     * @return
+     */
+    private PageResponse<?> convertToPageResponse(Page<User> users, int page, int size) {
+        List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build()).toList();
+        return PageResponse.builder()
+                .page(page)
+                .size(size)
+                .total(users.getTotalPages())
+                .items(response)
+                .build();
     }
 }

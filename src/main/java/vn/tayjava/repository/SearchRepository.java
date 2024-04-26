@@ -97,9 +97,9 @@ public class SearchRepository {
         Page<?> page = new PageImpl<>(users, pageable, totalElements);
 
         return PageResponse.builder()
-                .pageNo(pageNo)
-                .pageSize(pageSize)
-                .totalPage(page.getTotalPages())
+                .page(pageNo)
+                .size(pageSize)
+                .total(page.getTotalPages())
                 .items(users)
                 .build();
     }
@@ -145,9 +145,9 @@ public class SearchRepository {
         Page<User> page = new PageImpl<>(users, PageRequest.of(offset, pageSize), totalElements);
 
         return PageResponse.builder()
-                .pageNo(offset)
-                .pageSize(pageSize)
-                .totalPage(page.getTotalPages())
+                .page(offset)
+                .size(pageSize)
+                .total(page.getTotalPages())
                 .items(users)
                 .build();
     }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ import vn.tayjava.dto.response.UserDetailResponse;
 import vn.tayjava.exception.ResourceNotFoundException;
 import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/user")
@@ -133,5 +136,11 @@ public class UserController {
                                                      @RequestParam(defaultValue = "") String... search) {
         log.info("Request advance search query by criteria");
         return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchWithCriteria(pageNo, pageSize, sortBy, address, search));
+    }
+
+    @Operation(summary = "Advance search query by specifications", description = "Return list of users")
+    @GetMapping(path = "/advance-search-with-specifications", produces = APPLICATION_JSON_VALUE)
+    public ResponseData<?> advanceSearchWithSpecifications(Pageable pageable, @RequestParam(required = false) String... search) {
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getUsersBySpecifications(pageable, search));
     }
 }
