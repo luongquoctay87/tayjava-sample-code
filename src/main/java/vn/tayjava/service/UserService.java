@@ -26,5 +26,5 @@ public interface UserService {
 
     PageResponse<?> advanceSearchWithCriteria(int pageNo, int pageSize, String sortBy, String address, String... search);
 
-    PageResponse<?> getUsersBySpecifications(Pageable pageable, String[] search);
+    PageResponse<?> advanceSearchWithSpecifications(Pageable pageable, String[] search);
 }

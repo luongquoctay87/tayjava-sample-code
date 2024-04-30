@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static vn.tayjava.repository.specification.SearchOperation.SIMPLE_OPERATION_SET;
+import static vn.tayjava.util.AppConst.ADDRESS_REGEX;
 import static vn.tayjava.util.AppConst.SORT_BY;
 
 @Service
@@ -143,19 +144,8 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
         Page<User> users = userRepository.findAll(pageable);
-        List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .build()).toList();
-        return PageResponse.builder()
-                .page(pageNo)
-                .size(pageSize)
-                .total(users.getTotalPages())
-                .items(response)
-                .build();
+
+        return convertToPageResponse(users, pageable);
     }
 
     @Override
@@ -187,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
         Page<User> users = userRepository.findAll(pageable);
 
-        return convertToPageResponse(users, pageable.getPageNumber(), pageable.getPageSize());
+        return convertToPageResponse(users, pageable);
     }
 
     @Override
@@ -201,7 +191,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<?> getUsersBySpecifications(Pageable pageable, String... search) {
+    public PageResponse<?> advanceSearchWithSpecifications(Pageable pageable, String[] search) {
+        log.info("getUsersBySpecifications");
+
         UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
         String operations = Joiner.on("|").join(SIMPLE_OPERATION_SET);
 
@@ -214,12 +206,27 @@ public class UserServiceImpl implements UserService {
                     builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
                 }
             }
-            users = userRepository.findAll(Objects.requireNonNull(builder.build()), pageable);
+
+            if (Arrays.toString(search).contains(ADDRESS_REGEX)) {
+                users = searchRepository.searchUserByCriteriaWithJoin(builder.params, pageable);
+            } else {
+                users = userRepository.findAll(Objects.requireNonNull(builder.build()), pageable);
+            }
         } else {
             users = userRepository.findAll(pageable);
         }
 
-        return convertToPageResponse(users, pageable.getPageNumber(), pageable.getPageSize());
+        return convertToPageResponse(users, pageable);
+    }
+
+    /**
+     * Get user by ID
+     *
+     * @param userId
+     * @return
+     */
+    private User getUserById(long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     /**
@@ -245,19 +252,14 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private User getUserById(long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
     /**
      * Convert Page<User> to PageResponse
      *
      * @param users
-     * @param page
-     * @param size
+     * @param pageable
      * @return
      */
-    private PageResponse<?> convertToPageResponse(Page<User> users, int page, int size) {
+    private PageResponse<?> convertToPageResponse(Page<User> users, Pageable pageable) {
         List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -266,8 +268,8 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .build()).toList();
         return PageResponse.builder()
-                .page(page)
-                .size(size)
+                .page(pageable.getPageNumber())
+                .size(pageable.getPageSize())
                 .total(users.getTotalPages())
                 .items(response)
                 .build();
