@@ -10,7 +10,7 @@ import static vn.tayjava.repository.specification.SearchOperation.*;
 
 public final  class UserSpecificationsBuilder {
 
-    private final List<SpecSearchCriteria> params;
+    public final List<SpecSearchCriteria> params;
 
     public UserSpecificationsBuilder() {
         params = new ArrayList<>();
