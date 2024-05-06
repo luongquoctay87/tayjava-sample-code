@@ -139,8 +139,10 @@ public class UserController {
     }
 
     @Operation(summary = "Advance search query by specifications", description = "Return list of users")
-    @GetMapping(path = "/advance-search-with-specifications", produces = APPLICATION_JSON_VALUE)
-    public ResponseData<?> advanceSearchWithSpecifications(Pageable pageable, @RequestParam(required = false) String[] search) {
-        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchWithSpecifications(pageable, search));
+    @GetMapping(path = "/advance-search-with-specification", produces = APPLICATION_JSON_VALUE)
+    public ResponseData<?> advanceSearchWithSpecifications(Pageable pageable,
+                                                           @RequestParam(required = false) String[] user,
+                                                           @RequestParam(required = false) String[] address) {
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchWithSpecifications(pageable, user, address));
     }
 }
