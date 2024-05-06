@@ -1,6 +1,5 @@
 package vn.tayjava.service.impl;
 
-import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,8 +26,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static vn.tayjava.repository.specification.SearchOperation.SIMPLE_OPERATION_SET;
-import static vn.tayjava.util.AppConst.ADDRESS_REGEX;
+import static vn.tayjava.util.AppConst.SEARCH_SPEC_OPERATOR;
 import static vn.tayjava.util.AppConst.SORT_BY;
 
 @Service
@@ -191,32 +189,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<?> advanceSearchWithSpecifications(Pageable pageable, String[] search) {
+    public PageResponse<?> advanceSearchWithSpecifications(Pageable pageable, String[] user, String[] address) {
         log.info("getUsersBySpecifications");
 
-        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
-        String operations = Joiner.on("|").join(SIMPLE_OPERATION_SET);
+        if (user != null && address != null) {
+            return searchRepository.searchUserByCriteriaWithJoin(pageable, user, address);
+        } else if (user != null) {
+            UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
 
-        Page<User> users;
-        if (search != null) {
-            Pattern pattern = Pattern.compile("(\\w+?)(" + operations + ")(\\p{Punct}?)(.*)(\\p{Punct}?)");
-            for (String s : search) {
+            Pattern pattern = Pattern.compile(SEARCH_SPEC_OPERATOR);
+            for (String s : user) {
                 Matcher matcher = pattern.matcher(s);
                 if (matcher.find()) {
                     builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
                 }
             }
 
-            if (Arrays.toString(search).contains(ADDRESS_REGEX)) {
-                users = searchRepository.searchUserByCriteriaWithJoin(builder.params, pageable);
-            } else {
-                users = userRepository.findAll(Objects.requireNonNull(builder.build()), pageable);
-            }
-        } else {
-            users = userRepository.findAll(pageable);
+            Page<User> users = userRepository.findAll(Objects.requireNonNull(builder.build()), pageable);
+
+            return convertToPageResponse(users, pageable);
         }
 
-        return convertToPageResponse(users, pageable);
+        return convertToPageResponse(userRepository.findAll(pageable), pageable);
     }
 
     /**
