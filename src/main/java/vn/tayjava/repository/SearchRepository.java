@@ -162,6 +162,8 @@ public class SearchRepository {
      * @return
      */
     private List<User> getUsers(int offset, int pageSize, List<SearchCriteria> criteriaList, String address, String sortBy) {
+        log.info("-------------- getUsers --------------");
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = query.from(User.class);
@@ -206,6 +208,8 @@ public class SearchRepository {
      * @return
      */
     private Long getTotalElements(List<SearchCriteria> params) {
+        log.info("-------------- getTotalElements --------------");
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<User> root = query.from(User.class);
@@ -229,42 +233,55 @@ public class SearchRepository {
      * @return
      */
     public PageResponse searchUserByCriteriaWithJoin(Pageable pageable, String[] user, String[] address) {
-        log.info("searchUserByCriteriaWithJoin");
+        log.info("-------------- searchUserByCriteriaWithJoin --------------");
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> userRoot = query.from(User.class);
-        // Join<Address, User> addressRoot = userRoot.join("addresses");
+        Join<Address, User> addressRoot = userRoot.join("addresses");
 
-        List<Predicate> predicates = new ArrayList<>();
-
+        List<Predicate> userPreList = new ArrayList<>();
         Pattern pattern = Pattern.compile(SEARCH_SPEC_OPERATOR);
-        for (String s : user) {
-            Matcher matcher = pattern.matcher(s);
+        for (String u : user) {
+            Matcher matcher = pattern.matcher(u);
             if (matcher.find()) {
                 SpecSearchCriteria searchCriteria = new SpecSearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
-                predicates.add(toUserPredicate(userRoot, builder, searchCriteria));
+                userPreList.add(toUserPredicate(userRoot, builder, searchCriteria));
             }
         }
 
-        query.where(predicates.toArray(new Predicate[0]));
+        List<Predicate> addressPreList = new ArrayList<>();
+        for (String a : address) {
+            Matcher matcher = pattern.matcher(a);
+            if (matcher.find()) {
+                SpecSearchCriteria searchCriteria = new SpecSearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+                addressPreList.add(toAddressPredicate(addressRoot, builder, searchCriteria));
+            }
+        }
 
+        Predicate userPre = builder.or(userPreList.toArray(new Predicate[0]));
+        Predicate addPre = builder.or(addressPreList.toArray(new Predicate[0]));
+        Predicate finalPre = builder.and(userPre, addPre);
+
+        query.where(finalPre);
 
         List<User> users = entityManager.createQuery(query)
                 .setFirstResult(pageable.getPageNumber())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
 
-        log.info("----------------------> size={}", users.size());
+        long count = countUserJoinAddress(user, address);
 
         return PageResponse.builder()
                 .page(pageable.getPageNumber())
                 .size(pageable.getPageSize())
-                .total(1000).items(users)
+                .total(count)
+                .items(users)
                 .build();
     }
 
     private Predicate toUserPredicate(Root<User> root, CriteriaBuilder builder, SpecSearchCriteria criteria) {
+        log.info("-------------- toUserPredicate --------------");
         return switch (criteria.getOperation()) {
             case EQUALITY -> builder.equal(root.get(criteria.getKey()), criteria.getValue());
             case NEGATION -> builder.notEqual(root.get(criteria.getKey()), criteria.getValue());
@@ -278,6 +295,7 @@ public class SearchRepository {
     }
 
     private Predicate toAddressPredicate(Join<Address, User> root, CriteriaBuilder builder, SpecSearchCriteria criteria) {
+        log.info("-------------- toAddressPredicate --------------");
         return switch (criteria.getOperation()) {
             case EQUALITY -> builder.equal(root.get(criteria.getKey()), criteria.getValue());
             case NEGATION -> builder.notEqual(root.get(criteria.getKey()), criteria.getValue());
@@ -288,5 +306,50 @@ public class SearchRepository {
             case ENDS_WITH -> builder.like(root.get(criteria.getKey()), "%" + criteria.getValue());
             case CONTAINS -> builder.like(root.get(criteria.getKey()), "%" + criteria.getValue() + "%");
         };
+    }
+
+    /**
+     * Count user by conditions
+     *
+     * @param user
+     * @param address
+     * @return
+     */
+    private long countUserJoinAddress(String[] user, String[] address) {
+        log.info("-------------- countUserJoinAddress --------------");
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<User> userRoot = query.from(User.class);
+        Join<Address, User> addressRoot = userRoot.join("addresses");
+
+        List<Predicate> userPreList = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile(SEARCH_SPEC_OPERATOR);
+        for (String u : user) {
+            Matcher matcher = pattern.matcher(u);
+            if (matcher.find()) {
+                SpecSearchCriteria searchCriteria = new SpecSearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+                userPreList.add(toUserPredicate(userRoot, builder, searchCriteria));
+            }
+        }
+
+        List<Predicate> addressPreList = new ArrayList<>();
+        for (String a : address) {
+            Matcher matcher = pattern.matcher(a);
+            if (matcher.find()) {
+                SpecSearchCriteria searchCriteria = new SpecSearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+                addressPreList.add(toAddressPredicate(addressRoot, builder, searchCriteria));
+            }
+        }
+
+        Predicate userPre = builder.or(userPreList.toArray(new Predicate[0]));
+        Predicate addPre = builder.or(addressPreList.toArray(new Predicate[0]));
+        Predicate finalPre = builder.and(userPre, addPre);
+
+        query.select(builder.count(userRoot));
+        query.where(finalPre);
+
+        return entityManager.createQuery(query).getSingleResult();
     }
 }
