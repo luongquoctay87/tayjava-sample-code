@@ -34,7 +34,8 @@
 - [Bài 14. Spring Data JPA - Phần 2](https://youtu.be/zsiNVvCy9Uo)
 - [Bài 15. Spring Data JPA - Phần 3](https://youtu.be/jYbppQmNnO0)
 - [Bài 16. Spring Data JPA - Phần 4](https://youtu.be/SGMKy_DCUOM)
-
+- [Bài 17. Spring Data JPA - Phần 5](https://youtu.be/4pwWsOu5OKc)
+- [Bài 18. Spring Data JPA - Phần 6](https://youtu.be/s1MJbIfBI_0)
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
 - git checkout spring-data-jpa
