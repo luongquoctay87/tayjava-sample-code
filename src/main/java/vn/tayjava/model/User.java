@@ -14,10 +14,11 @@ import java.util.Set;
 
 @Setter
 @Getter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "tbl_user")
+@Table(name = "tbl_user")
 public class User extends AbstractEntity {
 
     @Column(name = "first_name")
@@ -60,11 +61,11 @@ public class User extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 
-//    @OneToMany(mappedBy = "role")
-//    private Set<Role> roles;
-//
-//    @OneToMany(mappedBy = "group")
-//    private Set<Group> groups;
+    @OneToMany(mappedBy = "user")
+    private Set<UserHasRole> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<GroupHasUser> groups = new HashSet<>();
 
     public void saveAddress(Address address) {
         if (address != null) {

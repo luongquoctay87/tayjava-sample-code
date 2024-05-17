@@ -3,12 +3,13 @@ package vn.tayjava.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
+@Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_address")
+@NoArgsConstructor
+@Table(name = "tbl_address")
 public class Address extends AbstractEntity {
 
     @Column(name = "apartment_number")
