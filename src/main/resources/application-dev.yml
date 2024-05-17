@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres?currentSchema=RBAC}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:password}
   jpa:
@@ -12,7 +12,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 
 springdoc:
   api-docs:

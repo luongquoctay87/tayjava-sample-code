@@ -60,6 +60,12 @@ public class User extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 
+//    @OneToMany(mappedBy = "role")
+//    private Set<Role> roles;
+//
+//    @OneToMany(mappedBy = "group")
+//    private Set<Group> groups;
+
     public void saveAddress(Address address) {
         if (address != null) {
             if (addresses == null) {
