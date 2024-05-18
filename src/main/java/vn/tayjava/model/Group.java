@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_group")
-public class Group extends AbstractEntity {
+public class Group extends AbstractEntity<Integer> {
 
     @Column(name = "name")
     private String name;

@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_role")
-public class Role extends AbstractEntity {
+public class Role extends AbstractEntity<Integer> {
 
     @Column(name = "name")
     private String name;

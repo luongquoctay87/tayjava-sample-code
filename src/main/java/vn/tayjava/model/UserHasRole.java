@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_user_has_role")
-public class UserHasRole extends AbstractEntity {
+public class UserHasRole extends AbstractEntity<Integer> {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
