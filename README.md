@@ -24,12 +24,14 @@
 
 ---
 
-## Bài 13 - Spring Boot, Postgres, JPA Cơ Bản
- - [Tây Java](https://tayjava.vn)
+## Series API Security
+ - [API Security](https://tayjava.vn)
+ - [Top 4 Cơ Chế Bảo Mật Phổ Biến Hiện Nay](https://tayjava.vn/top-4-co-che-bao-mat-pho-bien-hien-nay)
 
 ## Link Video
-- YouTube: [Bài 13 - Spring Boot, Postgres, JPA Cơ Bản]()
+- YouTube: [1. API Security - Cơ Chế Bảo Mật và Database Phân Quyền](https://youtu.be/S9r7OJt5zfs)
+- YouTube: [2. API Security - Mô Tả Chi Tiết Cách Phân Quyền Trên Database và @ManyToMany Trong Entity](https://youtu.be/TmLbs34mPo8)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
-- git checkout bai-13-postgres-jpa-basic
+- git checkout api-security
