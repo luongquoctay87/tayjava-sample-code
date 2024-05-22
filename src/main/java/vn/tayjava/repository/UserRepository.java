@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     Optional<User> findByEmail(String email);
+
     Optional<User> findByUsername(String username);
 
     @Query(value = "select r from Role r inner join UserHasRole ur on r.id = ur.user.id where ur.id = :userId")
