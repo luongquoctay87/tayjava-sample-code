@@ -26,3 +26,7 @@ openapi:
     serverName: Server Dev
     title: API Document
     version: 1.0.0
+
+jwt:
+  token:
+    secretKey: c2VjcmV0QGtleS5hcGlfaGFzX2JlZW5fZGVzaWduZWRfYnlfVGF5TFE=

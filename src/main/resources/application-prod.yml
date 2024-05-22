@@ -8,3 +8,7 @@ springdoc:
     enabled: false
   swagger-ui:
     enabled: false
+
+jwt:
+  token:
+    secretKey: ${JWT_SECRET_KEY}

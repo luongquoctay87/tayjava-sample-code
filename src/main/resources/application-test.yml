@@ -16,3 +16,6 @@ openapi:
     title: API Document
     version: 1.0.0
 
+jwt:
+  token:
+    secretKey: TEST-DUMMY-KEY

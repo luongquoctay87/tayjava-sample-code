@@ -18,12 +18,12 @@ import vn.tayjava.dto.response.UserDetailResponse;
 import vn.tayjava.service.UserService;
 import vn.tayjava.util.UserStatus;
 
-@RestController
-@RequestMapping("/user")
-@Validated
 @Slf4j
-@Tag(name = "User Controller")
+@Validated
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
+@Tag(name = "User Controller")
 public class UserController {
 
     private final UserService userService;
