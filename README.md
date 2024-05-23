@@ -19,11 +19,10 @@
 - Spring Boot 3.2.3
 - Maven 3.5+
 ---
-## Bài 3 - Validate Input Data Trong Spring Boot
- - https://tayjava.vn/validate-input-data-trong-spring-boot
+Bài 3 - [Validate Data Trong Spring Boot](https://tayjava.vn/validate-input-data-trong-spring-boot)
 
 ## Link Video
-- Youtube: [Bài 3 - Validate Input Data Trong Spring Boot](https://youtu.be/GYwUmy5WbkM)
+- Youtube: [Bài 3 - Validate Input Data Trong Spring Boot](https://youtu.be/4Zmw0PKJ9lY)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
