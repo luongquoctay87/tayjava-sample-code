@@ -31,6 +31,8 @@
 ## Link Video
 - YouTube: [1. API Security - Cơ Chế Bảo Mật và Database Phân Quyền](https://youtu.be/S9r7OJt5zfs)
 - YouTube: [2. API Security - Mô Tả Chi Tiết Cách Phân Quyền Trên Database và @ManyToMany Trong Entity](https://youtu.be/TmLbs34mPo8)
+- YouTube: [3. API Security: Spring Security + JWT + RBAC](https://youtu.be/deot45CglnY)
+- YouTube: [4. API security: Tạo Access token và Refresh token](https://youtu.be/KJ_z2bf_F8Y)
 
 ## Lấy Source Code Về
 - git clone https://github.com/luongquoctay87/tayjava-sample-code.git
